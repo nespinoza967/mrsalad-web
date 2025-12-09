@@ -141,8 +141,8 @@ function AdminReportes() {
 
     // Carga inicial de datos
     useEffect(() => {
-        fetch('http://localhost:3001/api/reportes/ventas').then(r => r.json()).then(setVentas).catch(console.error);
-        fetch('http://localhost:3001/api/gastos').then(r => r.json()).then(setGastos).catch(console.error);
+        fetch('https://mrsalad-api.onrender.com/api/reportes/ventas').then(r => r.json()).then(setVentas).catch(console.error);
+        fetch('https://mrsalad-api.onrender.com/api/gastos').then(r => r.json()).then(setGastos).catch(console.error);
     }, []);
 
     const handlePrintPDF = () => {
@@ -306,7 +306,7 @@ function AdminGastos() {
     const [showModal, setShowModal] = useState(false);
     const [newGasto, setNewGasto] = useState({tipo:'Boleta', numero:'', monto:'', descripcion:''});
 
-    const loadGastos = () => fetch('http://localhost:3001/api/gastos').then(r=>r.json()).then(setGastos).catch(console.error);
+    const loadGastos = () => fetch('https://mrsalad-api.onrender.com/api/gastos').then(r=>r.json()).then(setGastos).catch(console.error);
     useEffect(() => { loadGastos(); }, []);
 
     const saveGasto = async () => {
@@ -368,7 +368,7 @@ function AdminProductos({ inventario }) {
   const [cantSelect, setCantSelect] = useState('');
 
   const loadProductos = () => {
-      fetch('http://localhost:3001/api/productos').then(r => r.json()).then(setProductos).catch(console.error);
+      fetch('https://mrsalad-api.onrender.com/api/productos').then(r => r.json()).then(setProductos).catch(console.error);
   };
   useEffect(() => { loadProductos(); }, []);
 
@@ -396,7 +396,7 @@ function AdminProductos({ inventario }) {
   const handleSave = async () => {
       if (!prodActual.nombre || !prodActual.precio) return alert("Faltan datos");
       const method = prodActual.id ? 'PUT' : 'POST';
-      const url = prodActual.id ? `http://localhost:3001/api/productos/${prodActual.id}` : 'http://localhost:3001/api/productos';
+      const url = prodActual.id ? `https://mrsalad-api.onrender.com/api/productos/${prodActual.id}` : 'http://localhost:3001/api/productos';
       try {
           const res = await fetch(url, {
               method: method, headers: {'Content-Type':'application/json'},
@@ -410,7 +410,7 @@ function AdminProductos({ inventario }) {
   };
   
   const toggleEstado = async (p) => {
-      await fetch(`http://localhost:3001/api/productos/${p.id}/estado`, {
+      await fetch(`https://mrsalad-api.onrender.com/api/productos/${p.id}/estado`, {
           method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ activo: !p.activo_pos })
       });
       loadProductos();
@@ -418,7 +418,7 @@ function AdminProductos({ inventario }) {
   
   const handleDelete = async (id) => {
       if(!confirm("¿Eliminar permanentemente este producto?")) return;
-      await fetch(`http://localhost:3001/api/productos/${id}`, { method: 'DELETE' });
+      await fetch(`https://mrsalad-api.onrender.com/api/productos/${id}`, { method: 'DELETE' });
       loadProductos();
   };
 
@@ -488,17 +488,17 @@ function AdminCaja({ currentUser }) {
     const [cocinerosSelect, setCocinerosSelect] = useState([]);
 
     const loadData = () => {
-        fetch('http://localhost:3001/api/caja/estado').then(r=>r.json()).then(setCaja).catch(()=>setCaja(null));
-        fetch('http://localhost:3001/api/caja/historial').then(r=>r.json()).then(setHistorial).catch(console.error);
+        fetch('https://mrsalad-api.onrender.com/api/caja/estado').then(r=>r.json()).then(setCaja).catch(()=>setCaja(null));
+        fetch('https://mrsalad-api.onrender.com/api/caja/historial').then(r=>r.json()).then(setHistorial).catch(console.error);
     };
     
     useEffect(() => { 
         loadData(); 
-        fetch('http://localhost:3001/api/usuarios').then(r=>r.json()).then(setUsuarios); 
+        fetch('https://mrsalad-api.onrender.com/api/usuarios').then(r=>r.json()).then(setUsuarios); 
     }, []);
 
     const handleAbrir = async () => {
-        await fetch('http://localhost:3001/api/caja/abrir', {
+        await fetch('https://mrsalad-api.onrender.com/api/caja/abrir', {
             method: 'POST', headers: {'Content-Type':'application/json'},
             body: JSON.stringify({ usuario_id: currentUser.id, monto_apertura: montoApertura, cocineros_ids: cocinerosSelect })
         });
@@ -507,7 +507,7 @@ function AdminCaja({ currentUser }) {
     const handleCerrar = async () => {
         const montoCierre = prompt("Ingrese monto total efectivo en caja:");
         if(!montoCierre) return;
-        await fetch('http://localhost:3001/api/caja/cerrar', {
+        await fetch('https://mrsalad-api.onrender.com/api/caja/cerrar', {
             method: 'POST', headers: {'Content-Type':'application/json'},
             body: JSON.stringify({ caja_id: caja.id, monto_cierre_real: montoCierre })
         });
@@ -516,7 +516,7 @@ function AdminCaja({ currentUser }) {
 
     const openDetalleCaja = async (id) => {
         try {
-            const res = await fetch(`http://localhost:3001/api/caja/${id}/detalle`);
+            const res = await fetch(`https://mrsalad-api.onrender.com/api/caja/${id}/detalle`);
             if (!res.ok) throw new Error('No encontrado');
             const data = await res.json();
             setDetalleCaja(data);
@@ -624,19 +624,19 @@ function AdminUsuarios() {
     const [showModal, setShowModal] = useState(false);
     const [nuevoUser, setNuevoUser] = useState({ role: 'cajero', nombre_completo: '', username: '', password: '', rut: '', telefono: '', contacto_emergencia: '' });
 
-    const loadUsers = () => fetch('http://localhost:3001/api/usuarios').then(r=>r.json()).then(setUsuarios);
+    const loadUsers = () => fetch('https://mrsalad-api.onrender.com/api/usuarios').then(r=>r.json()).then(setUsuarios);
     useEffect(() => { loadUsers(); }, []);
 
     const handleSave = async () => {
         if(!nuevoUser.nombre_completo || !nuevoUser.rut) return alert("Faltan datos obligatorios");
-        await fetch('http://localhost:3001/api/usuarios', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(nuevoUser) });
+        await fetch('https://mrsalad-api.onrender.com/api/usuarios', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(nuevoUser) });
         setShowModal(false); loadUsers(); 
         setNuevoUser({ role: 'cajero', nombre_completo: '', username: '', password: '', rut: '', telefono: '', contacto_emergencia: '' });
     };
 
     const handleDelete = async (id) => { 
         if(confirm("¿Eliminar usuario?")) { 
-            await fetch(`http://localhost:3001/api/usuarios/${id}`, {method:'DELETE'}); 
+            await fetch(`api/usuarios/${id}`, {method:'DELETE'}); 
             loadUsers(); 
         }
     };
@@ -746,7 +746,7 @@ function DashboardContent({ inventario, favorites = [] }) {
   // Polling para actualizar las ventas cada 3 segundos
   useEffect(() => {
       const fetchVentas = () => {
-        fetch('http://localhost:3001/api/caja/estado')
+        fetch('https://mrsalad-api.onrender.com/api/caja/estado')
             .then(r=>r.json())
             .then(data => { if(data) setVentas(data.monto_ventas_sistema); })
             .catch(()=>setVentas(0));
@@ -758,7 +758,7 @@ function DashboardContent({ inventario, favorites = [] }) {
 
     // Cargar top productos semana
     useEffect(() => {
-            fetch('http://localhost:3001/api/reportes/top-productos-semana').then(r => r.json()).then(setTopWeek).catch(console.error);
+            fetch('https://mrsalad-api.onrender.com/api/reportes/top-productos-semana').then(r => r.json()).then(setTopWeek).catch(console.error);
     }, []);
 
   const safeInv = Array.isArray(inventario) ? inventario : [];
@@ -846,7 +846,7 @@ function InventarioContent({ inventario, setInventario, favorites = [], onToggle
 
   const handleSave = async () => {
       const method = itemActual.id ? 'PUT' : 'POST';
-      const url = itemActual.id ? `http://localhost:3001/api/inventario/${itemActual.id}` : 'http://localhost:3001/api/inventario';
+      const url = itemActual.id ? `https://mrsalad-api.onrender.com/api/inventario/${itemActual.id}` : 'http://localhost:3001/api/inventario';
       const payload = { nombre: itemActual.nombre, stockActual: parseFloat(itemActual.stock_actual), stockMinimo: parseFloat(itemActual.stock_minimo), unidad: itemActual.unidad };
       try {
           const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -906,7 +906,7 @@ function TerminalPedidosContent({ onConfirmarPedido, cart, setCart, stage, setSt
     const [productos, setProductos] = useState([]);
     
     useEffect(() => { 
-        fetch('http://localhost:3001/api/productos').then(r => r.json()).then(setProductos).catch(console.error); 
+        fetch('https://mrsalad-api.onrender.com/api/productos').then(r => r.json()).then(setProductos).catch(console.error); 
     }, []);
 
     const paymentOptions = ['Efectivo', 'Tarjeta', 'Sodexo'];
@@ -1077,9 +1077,9 @@ function App() {
   }, []);
 
   const refreshData = () => {
-      fetch('http://localhost:3001/api/inventario').then(r=>r.json()).then(d=>setInventario(Array.isArray(d)?d:[])).catch(console.error);
+      fetch('https://mrsalad-api.onrender.com/api/inventario').then(r=>r.json()).then(d=>setInventario(Array.isArray(d)?d:[])).catch(console.error);
       // Cargar KDS y aplicar límite por columna (max 5). El resto pasa a "en espera"
-      fetch('http://localhost:3001/api/kds/pendientes').then(r=>r.json()).then(data => {
+      fetch('https://mrsalad-api.onrender.com/api/kds/pendientes').then(r=>r.json()).then(data => {
           try {
               const now = Date.now();
               const items = Array.isArray(data) ? data.slice().sort((a,b) => (a.createdAt||0) - (b.createdAt||0)) : [];
@@ -1116,7 +1116,7 @@ function App() {
               setPedidosEnEspera(enEspera);
           } catch (e) { console.error(e); setPedidosEnCocina(Array.isArray(data)?data:[]); }
       }).catch(console.error);
-      fetch('http://localhost:3001/api/kds/completados').then(r=>r.json()).then(setPedidosCompletados).catch(console.error);
+      fetch('https://mrsalad-api.onrender.com/api/kds/completados').then(r=>r.json()).then(setPedidosCompletados).catch(console.error);
   };
 
   const toggleFavorite = (id) => {
@@ -1181,7 +1181,7 @@ function App() {
 
   const handleConfirmarPedido = async (p) => {
       try {
-          const res = await fetch('http://localhost:3001/api/pedidos', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...p, usuarioId: currentUser.id}) });
+          const res = await fetch('https://mrsalad-api.onrender.com/api/pedidos', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...p, usuarioId: currentUser.id}) });
           const data = await res.json();
           if(res.ok) {
              setToast({ message: `✅ ${data.message} (ID: ${data.pedidoId})`, type: 'success' });
@@ -1194,7 +1194,7 @@ function App() {
   };
 
   const handleCompletarKDS = async (id) => {
-      await fetch(`http://localhost:3001/api/kds/${id}/completar`, { method: 'PUT' });
+      await fetch(`https://mrsalad-api.onrender.com/api/kds/${id}/completar`, { method: 'PUT' });
       // Remover del array activo
       const pedido = pedidosEnCocina.find(p => p.id === id);
       if (pedido) {
@@ -1215,7 +1215,7 @@ function App() {
       refreshData();
   };
   
-  const handleEliminarKDS = async (id) => { await fetch(`http://localhost:3001/api/kds/${id}`, { method: 'DELETE' }); refreshData(); };
+  const handleEliminarKDS = async (id) => { await fetch(`https://mrsalad-api.onrender.com/api/kds/${id}`, { method: 'DELETE' }); refreshData(); };
   
   const handleNav = (view) => {
       if(currentView === 'terminal' && cart.length > 0 && !confirm("¿Salir? Se perderá el pedido actual.")) return;
