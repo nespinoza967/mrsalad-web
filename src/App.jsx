@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 // --- CONSTANTES Y UTILIDADES ---
-
+const API_BASE_URL = 'https://mrsalad-api.onrender.com'
 // Asegúrate de que la imagen esté en la carpeta 'public'
 const LOGO_URL = '/mrsaladlogo.jpg'; 
 
