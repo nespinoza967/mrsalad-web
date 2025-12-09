@@ -311,7 +311,7 @@ function AdminGastos() {
 
     const saveGasto = async () => {
         if(!newGasto.monto) return alert("Falta el monto");
-        await fetch('http://localhost:3001/api/gastos', { 
+        await fetch('https://mrsalad-api.onrender.com/api/gastos', { 
             method: 'POST', headers:{'Content-Type':'application/json'}, 
             body: JSON.stringify(newGasto) 
         });
@@ -396,7 +396,7 @@ function AdminProductos({ inventario }) {
   const handleSave = async () => {
       if (!prodActual.nombre || !prodActual.precio) return alert("Faltan datos");
       const method = prodActual.id ? 'PUT' : 'POST';
-      const url = prodActual.id ? `https://mrsalad-api.onrender.com/api/productos/${prodActual.id}` : 'http://localhost:3001/api/productos';
+      const url = prodActual.id ? `https://mrsalad-api.onrender.com/api/productos/${prodActual.id}` : 'https://mrsalad-api.onrender.com/api/productos';
       try {
           const res = await fetch(url, {
               method: method, headers: {'Content-Type':'application/json'},
@@ -846,12 +846,12 @@ function InventarioContent({ inventario, setInventario, favorites = [], onToggle
 
   const handleSave = async () => {
       const method = itemActual.id ? 'PUT' : 'POST';
-      const url = itemActual.id ? `https://mrsalad-api.onrender.com/api/inventario/${itemActual.id}` : 'http://localhost:3001/api/inventario';
+      const url = itemActual.id ? `https://mrsalad-api.onrender.com/api/inventario/${itemActual.id}` : 'https://mrsalad-api.onrender.com/api/inventario';
       const payload = { nombre: itemActual.nombre, stockActual: parseFloat(itemActual.stock_actual), stockMinimo: parseFloat(itemActual.stock_minimo), unidad: itemActual.unidad };
       try {
           const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
           if(res.ok) {
-             const newData = await (await fetch('http://localhost:3001/api/inventario')).json();
+             const newData = await (await fetch('https://mrsalad-api.onrender.com/api/inventario')).json();
              setInventario(newData); setShowModal(false);
           }
       } catch (e) { alert("Error"); }
@@ -859,7 +859,7 @@ function InventarioContent({ inventario, setInventario, favorites = [], onToggle
 
   const handleDelete = async (id) => {
       if(prompt("Clave Admin:") !== "1231") return alert("Clave incorrecta");
-      await fetch(`http://localhost:3001/api/inventario/${id}`, { method: 'DELETE' });
+      await fetch(`https://mrsalad-api.onrender.com/api/inventario/${id}`, { method: 'DELETE' });
       setInventario(inventario.filter(i => i.id !== id));
   };
 
